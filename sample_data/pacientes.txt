@@ -1,0 +1,28 @@
+Paciente: Juan Perez
+RUT: 12.345.678-9
+Correo: juan@gmail.com
+Diagnostico: biopsia pendiente
+
+Paciente: Maria Soto
+Correo: maria@hospital.cl
+Observacion: control oncologia
+
+Paciente: Juan Gonzalez
+RUT: 12.445.678-9
+Correo: juang@gmail.com
+Diagnostico: Toracocentesis
+
+Paciente: Maria Valdevenito
+Correo: mariav@hospital.cl
+Observacion: control odontologia
+
+Paciente: Felipe Sepulveda
+RUT: 8.345.434-9
+Correo: juan@gmail.com
+Diagnostico: Urologia
+
+Paciente: Juana Soto
+Correo: Juanas@hospital.cl
+Observacion: control oncologia
+
+
