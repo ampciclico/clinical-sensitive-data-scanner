@@ -1,11 +1,5 @@
 #!/usr/bin/env python3
 
-"""
-Clinical Sensitive Data Scanner v0.1
-Herramienta de reconocimiento de metadatas.
-Autor: [Rodrigo C. O./AmpCiclicox]
-"""
-
 import re
 import os
 
