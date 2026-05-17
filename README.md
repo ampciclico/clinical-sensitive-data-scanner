@@ -4,8 +4,8 @@
 Este proyecto nació como una herramienta práctica para fortalecer el aprendizaje de python que inicie desde 0 hace un par de meses atras, lo que me ha permitido mejorar el uso de expresiones regulares, manejo de estructuras de datos eficientes y desarrollo seguro en entornos Linux.
 
 ## Características Principales
-*   **Detección de Identificadores Nacionales:** Escaneo y extracción automática de RUTs mediante expresiones regulares.
-*   **Identificación de Canales de Contacto:** Parseo de direcciones de correo electrónico.
+*   **Detección de Ruts:** Escaneo y extracción automática de RUTs mediante expresiones regulares.
+*   **Identificación de correos electrónicos:** Parseo de direcciones de correo electrónico.
 *   **Filtro por Palabras Clave:** Búsqueda dirigida basada en un diccionario de `SENSITIVE_KEYWORDS` (por ejemplo: diagnósticos, términos clínicos específicos, etc.).
 *   **Asociación Estructurada:** Vinculación estricta de cada hallazgo con su respectivo archivo de origen.
 *   **Deduplicación Inteligente:** Uso de conjuntos (`sets`) para garantizar que los datos repetidos dentro de un mismo archivo se reporten una sola vez, optimizando la lectura del reporte.
