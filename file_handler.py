@@ -5,9 +5,8 @@ from pathlib import Path
 
 def get_text_files(directory):
     path = Path(directory)
-
+    
     return list(path.rglob("*.txt"))
-
 
 def read_file(file_path):
     try:
