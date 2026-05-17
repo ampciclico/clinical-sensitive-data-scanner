@@ -3,7 +3,7 @@
 """
 Clinical Sensitive Data Scanner v0.1
 Herramienta de reconocimiento de metadatas.
-Autor: [Rodrigo Casanova O./AmpCiclicox]
+Autor: [Rodrigo C. O./AmpCiclicox]
 """
 
 import re
