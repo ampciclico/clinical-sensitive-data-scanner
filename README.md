@@ -1,6 +1,6 @@
 # Clinical Sensitive Data Scanner
 
-*****Estado actual del proyecto: Beta (v0.8-beta)
+*Estado actual del proyecto: Beta (v0.8-beta)
 
 Clinical Sensitive Data Scanner es una herramienta desarrollada en Python orientada al reconocimiento y auditoría de archivos de texto plano (.txt) en entornos clínicos. Su objetivo principal es detectar posibles fugas de información sensible (DLP - Data Loss Prevention), identificando patrones críticos asociados a datos de pacientes o personal de salud.
 
