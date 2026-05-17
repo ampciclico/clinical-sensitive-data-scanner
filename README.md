@@ -5,7 +5,7 @@ Este proyecto nació como una herramienta práctica para fortalecer el aprendiza
 
 ## Características Principales
 *   **Detección de Ruts:** Escaneo y extracción automática de RUTs mediante expresiones regulares.
-*   **Identificación de correos electrónicos:** Parseo de direcciones de correo electrónico.
+*   **Identificación de Emails:** Parseo de direcciones de correo electrónico.
 *   **Filtro por Palabras Clave:** Búsqueda dirigida basada en un diccionario de `SENSITIVE_KEYWORDS` (por ejemplo: diagnósticos, términos clínicos específicos, etc.).
 *   **Asociación Estructurada:** Vinculación estricta de cada hallazgo con su respectivo archivo de origen.
 *   **Deduplicación Inteligente:** Uso de conjuntos (`sets`) para garantizar que los datos repetidos dentro de un mismo archivo se reporten una sola vez, optimizando la lectura del reporte.
