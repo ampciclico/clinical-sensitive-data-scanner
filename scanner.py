@@ -46,12 +46,8 @@ def scan_file(file_path):
         return sensitive_data
     return None
 
-def main():
+def display_results(files):
     
-    target_directory = input("Ingrese directorio a escanear: ")
-
-    files = get_text_files(target_directory)  
-         
     print("=" * 50)
     print("Clinical Sensitive Data Scanner v0.1")
     print("=" * 50)
@@ -74,6 +70,7 @@ def main():
                 "keywords": datos.get("keywords", [])
             }
             archivos.append(archivo)
+
     print(f"Archivos comprometidos detectados: {'. '.join(a for a in archivos)}") 
     for archivo, datos in all_sensitive_data.items():
         ruts_output = '\n- ' + '\n- '.join(ruts for ruts in datos ['ruts'])
@@ -84,6 +81,12 @@ def main():
         print(f"\n[!] [RUTS]: {ruts_output}")
         print(f"\n[!] [EMAILS]: {emails_output}")
         print(f"\n[!] [KEYWORDS]: {keywords_output}")
+
+def main():
+    
+    target_directory = input("Ingrese directorio a escanear: ")
+    files = get_text_files(target_directory)  
+    display_results(files)
 
 if __name__ == "__main__":
     main()
