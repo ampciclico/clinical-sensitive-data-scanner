@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 
-import sys
+#import sys
 import re
 import os
 import argparse
+from termcolor import colored
+
 
 from patterns import (
     RUT_PATTERN,
@@ -19,12 +21,12 @@ from file_handler import (
 
 def get_argument():
     parser = argparse.ArgumentParser(description="Clinical Sensitive Data Scanner")
-    parser.add_argument("-d", "--directory", dest="target_directory", help="Directory to Scan")
+    parser.add_argument("-d", "--directory", required=True, dest="target_directory", help="Directory to Scan")
     options = parser.parse_args()
 
-    if options.target_directory is None:
-        parser.print_help()
-        sys.exit(1)
+    #if options.target_directory is None:
+     #   parser.print_help()
+      #  sys.exit(1)
 
     return options.target_directory
 
@@ -62,9 +64,9 @@ def scan_file(file_path):
 
 def display_results(files):
     
-    print("=" * 50)
-    print("Clinical Sensitive Data Scanner v0.1")
-    print("=" * 50)
+    print(colored("=" * 50, "yellow"))
+    print(colored("Clinical Sensitive Data Scanner v0.1", "red"))
+    print(colored("=" * 50, "yellow"))
     print("\n------------------- DETALLES --------------------------\n")
      
     all_sensitive_data = {}    
@@ -92,9 +94,9 @@ def display_results(files):
         keywords_output = '\n- ' + '\n- '.join(datos['keywords'])
 
         print(f"\nArchivo analizado ---> {archivo}") 
-        print(f"\n[!] [RUTS]: {ruts_output}")
-        print(f"\n[!] [EMAILS]: {emails_output}")
-        print(f"\n[!] [KEYWORDS]: {keywords_output}")
+        print(colored(f"\n[!] [RUTS]: {ruts_output}", "red"))
+        print(colored(f"\n[!] [EMAILS]: {emails_output}", "blue"))
+        print(colored(f"\n[!] [KEYWORDS]: {keywords_output}", "cyan"))
 
 def main():
     
