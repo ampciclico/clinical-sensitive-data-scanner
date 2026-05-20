@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 
+import sys
 import re
 import os
+import argparse
 
 from patterns import (
     RUT_PATTERN,
@@ -13,6 +15,18 @@ from file_handler import (
     get_text_files,
     read_file
 )
+
+
+def get_argument():
+    parser = argparse.ArgumentParser(description="Clinical Sensitive Data Scanner")
+    parser.add_argument("-d", "--directory", dest="target_directory", help="Directory to Scan")
+    options = parser.parse_args()
+
+    if options.target_directory is None:
+        parser.print_help()
+        sys.exit(1)
+
+    return options.target_directory
 
 def scan_file(file_path):
     try:
@@ -73,9 +87,9 @@ def display_results(files):
 
     print(f"Archivos comprometidos detectados: {'. '.join(a for a in archivos)}") 
     for archivo, datos in all_sensitive_data.items():
-        ruts_output = '\n- ' + '\n- '.join(ruts for ruts in datos ['ruts'])
-        emails_output = '\n- ' + '\n- '.join(emails for emails in datos ['emails'])
-        keywords_output = '\n- ' + '\n- '.join(keyword for keyword in datos ['keywords'])
+        ruts_output = '\n- ' + '\n- '.join(datos['ruts'])
+        emails_output = '\n- ' + '\n- '.join(datos['emails'])
+        keywords_output = '\n- ' + '\n- '.join(datos['keywords'])
 
         print(f"\nArchivo analizado ---> {archivo}") 
         print(f"\n[!] [RUTS]: {ruts_output}")
@@ -84,8 +98,8 @@ def display_results(files):
 
 def main():
     
-    target_directory = input("Ingrese directorio a escanear: ")
-    files = get_text_files(target_directory)  
+    target_directory = get_argument()
+    files = get_text_files(target_directory)
     display_results(files)
 
 if __name__ == "__main__":
