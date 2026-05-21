@@ -5,7 +5,8 @@ import re
 import os
 import argparse
 from termcolor import colored
-
+import signal
+import sys
 
 from patterns import (
     RUT_PATTERN,
@@ -18,6 +19,12 @@ from file_handler import (
     read_file
 )
 
+def signal_handler(sig, frame):
+    print(colored(f"\n[!] Scanner detenido por el usuario\n", "red"))
+    
+    sys.exit(1)
+
+signal.signal(signal.SIGINT, signal_handler)
 
 def get_argument():
     parser = argparse.ArgumentParser(description="Clinical Sensitive Data Scanner")
