@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-#import sys
 import re
 import os
 import argparse
@@ -32,13 +31,10 @@ def get_argument():
     parser.add_argument("-d", "--directory", required=True, dest="target_directory", help="Directory to Scan")
     parser.add_argument("-o", "--output", help="Genera un reporte en Json")
     parser.add_argument("--json", action="store_true", help="Output results in JSON format")
-    #
+    
     
     return parser.parse_args()
-    #if options.target_directory is None:
-     #   parser.print_help()
-      #  sys.exit(1)
-
+    
 def scan_file(file_path):
     try:
         content = read_file(file_path)
@@ -107,7 +103,7 @@ def display_results(files, args):
         print(colored("=" * 50, "yellow"))
         print("\n------------------- DETALLES --------------------------\n")
          
-        print(f"Archivos comprometidos detectados: {'. '.join(a for a in archivos)}") 
+        print(f"Archivos comprometidos detectados: {', '.join(archivos)}") 
         for archivo, datos in all_sensitive_data.items():
             ruts_output = '\n- ' + '\n- '.join(datos['ruts'])
             emails_output = '\n- ' + '\n- '.join(datos['emails'])
@@ -130,11 +126,11 @@ def display_results(files, args):
 
         if args.output:
             with open(args.output, "w", encoding="utf-8") as f:
-                json.dump(output, f, indent=4)
+                json.dump(output, f, indent=4, ensure_ascii=False)
 
             print(f"[+] Reporte en json guardado como --> {args.output}")
         else:
-            print(json.dumps(output, indent=4))
+            print(json.dumps(output, indent=4, ensure_ascii=False))
     
     # sección resumen en JSON con estadísticas globales del escaneo:
     # Permite conocer inmediatamente cuántos archivos fueron analizados.
