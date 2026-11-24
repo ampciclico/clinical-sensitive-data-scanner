@@ -7,6 +7,7 @@ import argparse
 from termcolor import colored
 import signal
 import sys
+import json
 
 from patterns import (
     RUT_PATTERN,
@@ -29,13 +30,14 @@ signal.signal(signal.SIGINT, signal_handler)
 def get_argument():
     parser = argparse.ArgumentParser(description="Clinical Sensitive Data Scanner")
     parser.add_argument("-d", "--directory", required=True, dest="target_directory", help="Directory to Scan")
-    options = parser.parse_args()
-
+    parser.add_argument("-o", "--output", help="Genera un reporte en Json")
+    parser.add_argument("--json", action="store_true", help="Output results in JSON format")
+    #
+    
+    return parser.parse_args()
     #if options.target_directory is None:
      #   parser.print_help()
       #  sys.exit(1)
-
-    return options.target_directory
 
 def scan_file(file_path):
     try:
@@ -69,22 +71,19 @@ def scan_file(file_path):
         return sensitive_data
     return None
 
-def display_results(files):
+def display_results(files, args):
     
-    print(colored("=" * 50, "yellow"))
-    print(colored("Clinical Sensitive Data Scanner v0.1", "red"))
-    print(colored("=" * 50, "yellow"))
-    print("\n------------------- DETALLES --------------------------\n")
-     
     all_sensitive_data = {}    
-    
-    print(f"[!] Archivos encontrados y que seran analizados ---> [{len(files)}]\n")
-    
     archivos = []
+
+    files_with_findings = 0 # contabiliza cuántos archivos contienen información sensible:
 
     for file in files: 
         sensitive_data = scan_file(file)
         if sensitive_data:
+            
+            files_with_findings += 1 # en cada pasada True, se agrega +1
+
             datos = sensitive_data.get("datos", {})
             archivo = os.path.basename(file)    
             all_sensitive_data[archivo] = {
@@ -93,23 +92,62 @@ def display_results(files):
                 "keywords": datos.get("keywords", [])
             }
             archivos.append(archivo)
+     
+    if not args.json and args.output:
+        
+        print("Error: si quieres generar un reporte, debes utilizar --json y luego -o")
+        sys.exit(1)
 
-    print(f"Archivos comprometidos detectados: {'. '.join(a for a in archivos)}") 
-    for archivo, datos in all_sensitive_data.items():
-        ruts_output = '\n- ' + '\n- '.join(datos['ruts'])
-        emails_output = '\n- ' + '\n- '.join(datos['emails'])
-        keywords_output = '\n- ' + '\n- '.join(datos['keywords'])
+    if not args.json:
+        
+        print(f"[!] Archivos encontrados y que seran analizados ---> [{len(files)}]\n")
 
-        print(f"\nArchivo analizado ---> {archivo}") 
-        print(colored(f"\n[!] [RUTS]: {ruts_output}", "red"))
-        print(colored(f"\n[!] [EMAILS]: {emails_output}", "blue"))
-        print(colored(f"\n[!] [KEYWORDS]: {keywords_output}", "cyan"))
+        print(colored("=" * 50, "yellow"))
+        print(colored("Clinical Sensitive Data Scanner v0.1", "red"))
+        print(colored("=" * 50, "yellow"))
+        print("\n------------------- DETALLES --------------------------\n")
+         
+        print(f"Archivos comprometidos detectados: {'. '.join(a for a in archivos)}") 
+        for archivo, datos in all_sensitive_data.items():
+            ruts_output = '\n- ' + '\n- '.join(datos['ruts'])
+            emails_output = '\n- ' + '\n- '.join(datos['emails'])
+            keywords_output = '\n- ' + '\n- '.join(datos['keywords'])
+
+            print(f"\nArchivo analizado ---> {archivo}") 
+            print(colored(f"\n[!] [RUTS]: {ruts_output}", "red"))
+            print(colored(f"\n[!] [EMAILS]: {emails_output}", "blue"))
+            print(colored(f"\n[!] [KEYWORDS]: {keywords_output}", "cyan"))
+
+    else:
+        
+        output = {
+            "summary": {
+            "files_scanned": len(files),
+            "files_with_findings": files_with_findings
+                        },
+            "results": all_sensitive_data
+                }
+
+        if args.output:
+            with open(args.output, "w", encoding="utf-8") as f:
+                json.dump(output, f, indent=4)
+
+            print(f"[+] Reporte en json guardado como --> {args.output}")
+        else:
+            print(json.dumps(output, indent=4))
+    
+    # sección resumen en JSON con estadísticas globales del escaneo:
+    # Permite conocer inmediatamente cuántos archivos fueron analizados.
+    # Permite conocer cuántos archivos contienen datos sensibles.
+    # Separa metadatos del reporte de los resultados del escaneo.
+    # Facilita futuras ampliaciones del formato JSON.
+    # Acerca la estructura a formatos utilizados en herramientas profesionales de análisis y monitoreo.
 
 def main():
     
-    target_directory = get_argument()
-    files = get_text_files(target_directory)
-    display_results(files)
+    args = get_argument()
+    files = get_text_files(args.target_directory)
+    display_results(files, args)
 
 if __name__ == "__main__":
     main()
