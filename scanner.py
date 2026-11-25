@@ -32,43 +32,15 @@ def get_argument():
     parser.add_argument("-o", "--output", help="Genera un reporte en Json")
     parser.add_argument("--json", action="store_true", help="Output results in JSON format")
     
-    
-    return parser.parse_args()
-    
-def scan_file(file_path):
-    try:
-        content = read_file(file_path)
-    except Exception as e:
-        print(f"[!!] Archivo no legible o no existe {file_path}:{e}")
-        return None
+    args = parser.parse_args()
+    if not args.json and args.output:
+        parser.error("-o/--output requiere --json")
 
-    ruts = sorted(set(re.findall(RUT_PATTERN, content)))
-    emails = sorted(set(re.findall(EMAIL_PATTERN, content)))
+    return args
 
-    content_lower = content.lower()
-    keyword_matches = []
-    for keyword in SENSITIVE_KEYWORDS:
-        if keyword.lower() in content_lower:
-            keyword_matches.append(keyword)
-
-    if ruts or emails or keyword_matches:    
-        
-        sensitive_data = {
-                "metadata": {
-                    "archivo": file_path
-                    },
-                "datos": {
-                    "ruts": ruts,
-                    "emails": emails,
-                    "keywords": keyword_matches
-                    }   
-                }
-
-        return sensitive_data
-    return None
 
 def display_results(files, args):
-    
+ 
     all_sensitive_data = {}    
     archivos = []
 
@@ -89,11 +61,6 @@ def display_results(files, args):
             }
             archivos.append(archivo)
      
-    if not args.json and args.output:
-        
-        print("Error: si quieres generar un reporte, debes utilizar --json y luego -o")
-        sys.exit(1)
-
     if not args.json:
         
         print(f"[!] Archivos encontrados y que seran analizados ---> [{len(files)}]\n")
@@ -138,6 +105,38 @@ def display_results(files, args):
     # Separa metadatos del reporte de los resultados del escaneo.
     # Facilita futuras ampliaciones del formato JSON.
     # Acerca la estructura a formatos utilizados en herramientas profesionales de análisis y monitoreo.
+   
+def scan_file(file_path):
+    try:
+        content = read_file(file_path)
+    except Exception as e:
+        print(f"[!!] Archivo no legible o no existe {file_path}:{e}")
+        return None
+
+    ruts = sorted(set(re.findall(RUT_PATTERN, content)))
+    emails = sorted(set(re.findall(EMAIL_PATTERN, content)))
+
+    content_lower = content.lower()
+    keyword_matches = []
+    for keyword in SENSITIVE_KEYWORDS:
+        if keyword.lower() in content_lower:
+            keyword_matches.append(keyword)
+
+    if ruts or emails or keyword_matches:    
+        
+        sensitive_data = {
+                "metadata": {
+                    "archivo": file_path
+                    },
+                "datos": {
+                    "ruts": ruts,
+                    "emails": emails,
+                    "keywords": keyword_matches
+                    }   
+                }
+
+        return sensitive_data
+    return None
 
 def main():
     
